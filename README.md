@@ -97,6 +97,129 @@ curl -sSL https://dataease.oss-cn-hangzhou.aliyuncs.com/quick_start_v2.sh | bash
 -   数据处理：[Apache Calcite](https://github.com/apache/calcite/)、[Apache SeaTunnel](https://github.com/apache/seatunnel)
 -   基础设施：[Docker](https://www.docker.com/)
 
+## 插件系统
+
+DataEase 提供了强大的插件扩展能力，支持以下类型的插件：
+
+- **数据源插件**：扩展支持更多数据源类型
+- **图表插件**：添加自定义图表类型
+- **嵌入插件**：支持第三方平台集成（如飞书、钉钉、企业微信等）
+- **数据填报插件**：扩展数据填报功能
+- **推送插件**：支持实时数据推送（如 WebSocket）
+
+### 官方支持的插件
+
+| 插件名称 | 类型 | 说明 |
+|---------|-----|------|
+| 飞书数据源插件 | 数据源 | 连接飞书多维表格 |
+| Kafka 数据源插件 | 数据源 | 连接 Kafka 消息队列 |
+| 钉钉嵌入插件 | 嵌入 | 钉钉 SSO 和工作台集成 |
+| WebSocket 推送插件 | 推送 | 实时数据变更推送 |
+
+### 插件安装与使用
+
+#### 方式一：通过 UI 安装（推荐）
+
+1. 登录 DataEase 系统
+2. 进入【系统设置】>【插件管理】
+3. 点击【上传插件】按钮
+4. 选择插件 jar 包文件
+5. 点击【安装】完成插件安装
+6. 安装成功后在对应功能模块中使用
+
+#### 方式二：手动部署
+
+对于企业版，也可以手动部署插件：
+
+```bash
+# 1. 将插件 jar 包复制到插件目录
+cp your-plugin.jar /opt/dataease2.0/plugins/
+
+# 2. 重启 DataEase 服务
+/opt/dataease2.0/bin/restart.sh
+```
+
+### 插件开发
+
+如果您需要开发自定义插件，可以参考以下步骤：
+
+#### 1. 了解插件类型
+
+DataEase 支持的插件基类：
+- `DataEaseDatasourcePlugin` - 数据源插件
+- `DataEaseChartPlugin` - 图表插件
+- `DataEaseEmbedPlugin` - 嵌入集成插件
+- `DataFillingPlugin` - 数据填报插件
+
+#### 2. 创建插件项目结构
+
+```
+your-plugin/
+├── pom.xml
+├── data.yaml
+├── README.md
+└── src/
+    └── main/
+        └── java/
+            └── io/
+                └── dataease/
+                    └── extensions/
+                        └── yourplugin/
+                            └── YourPlugin.java
+```
+
+#### 3. 配置 data.yaml
+
+```yaml
+name: 你的插件名称
+title: 插件显示标题
+description: 插件功能描述
+tags:
+  - 标签1
+  - 标签2
+additionalProperties:
+  enterprise: true  # 是否企业版插件
+```
+
+#### 4. 实现插件类
+
+```java
+@DataEasePlugin(name = "your-plugin")
+public class YourPlugin extends DataEaseDatasourcePlugin {
+    
+    @Override
+    public void loadPlugin() {
+        // 插件加载时执行
+    }
+    
+    @Override
+    public void unloadPlugin() {
+        // 插件卸载时执行
+    }
+}
+```
+
+#### 5. 打包插件
+
+```bash
+mvn clean package
+```
+
+打包后会在 `target/` 目录下生成插件 jar 包。
+
+### 插件 API
+
+插件管理提供以下 API 接口：
+
+| 接口 | 方法 | 说明 |
+|-----|-----|------|
+| `/plugin/query` | GET | 查询已安装的插件列表 |
+| `/plugin/install` | POST | 上传并安装插件 |
+| `/plugin/uninstall/{id}` | POST | 卸载指定插件 |
+| `/plugin/update` | POST | 更新插件 |
+
+详细 API 文档请参考 [api_readme.md](file:///workspace/api_readme.md)。
+
 ## 飞致云的其他明星项目
 
 - [1Panel](https://github.com/1panel-dev/1panel/) - 现代化、开源的 Linux 服务器运维管理面板
