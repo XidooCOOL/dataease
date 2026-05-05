@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.dataease</groupId>
+        <artifactId>extensions</artifactId>
+        <version>${dataease.version}</version>
+    </parent>
+
+    <artifactId>extensions-datasource-lark</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.dataease</groupId>
+            <artifactId>extensions-datasource</artifactId>
+            <version>${dataease.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lark.oapi</groupId>
+            <artifactId>oapi-sdk-java</artifactId>
+            <version>6.9.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>2.0.43</version>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>lark-oapi</id>
+            <name>Lark Open API</name>
+            <url>https://jfrog.dev01.dev蠕动.com/artifactory/lark-sdk</url>
+        </repository>
+    </repositories>
+
+</project>

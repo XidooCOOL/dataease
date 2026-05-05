@@ -16,6 +16,7 @@
         <module>extensions-datafilling</module>
         <module>extensions-embed</module>
         <module>extensions-datasource-kafka</module>
+        <module>extensions-datasource-lark</module>
         <module>extensions-push-websocket</module>
     </modules>
 

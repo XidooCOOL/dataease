@@ -1,0 +1,8 @@
+name: 飞书数据源插件
+title: 飞书数据源插件
+description: 飞书数据源插件，支持连接飞书多维表格进行数据分析和可视化，推荐使用 DataEase v2.10.21 及以上版本
+tags:
+  - 数据源插件
+  - API数据源
+additionalProperties:
+  enterprise: true
