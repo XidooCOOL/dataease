@@ -27,7 +27,11 @@ core/core-frontend/src/theme/mobile/
 ├── elementPlusMobile.ts               # Element Plus Mobile 主题
 ├── antDesignMobile.ts                # Ant Design Mobile 主题
 ├── components/
-│   └── ThemeSwitcher.vue              # 主题切换组件
+│   ├── ThemeSwitcher.vue             # 主题切换组件（悬浮按钮）
+│   ├── ThemePicker.vue               # 主题选择器（弹窗）
+│   └── ThemePreview.vue              # 主题预览缩略图组件
+├── examples/
+│   └── ThemePreviewPage.vue          # 主题预览页面示例
 └── styles/
     └── theme-variables.css            # 全局样式变量
 ```
@@ -158,9 +162,54 @@ export default {
 }
 ```
 
-### 3. 主题切换组件
+### 3. 主题预览组件
 
-#### ThemeSwitcher.vue - 主题选择器
+#### ThemePreview.vue - 主题预览缩略图
+
+单个主题预览组件，展示主题的颜色和布局效果：
+
+```vue
+<template>
+  <ThemePreview 
+    :theme="currentTheme" 
+    :is-active="true"
+  />
+</template>
+
+<script setup lang="ts">
+import { getThemeConfig } from '@/theme/mobile'
+import ThemePreview from '@/theme/mobile/components/ThemePreview.vue'
+
+const currentTheme = getThemeConfig('light')
+</script>
+```
+
+#### ThemePicker.vue - 主题选择器
+
+完整的主题选择弹窗，包含所有主题预览和智能切换设置：
+
+```vue
+<template>
+  <ThemePicker 
+    @close="showPicker = false" 
+    @change="handleThemeChange"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import ThemePicker from '@/theme/mobile/components/ThemePicker.vue'
+
+const showPicker = ref(false)
+const handleThemeChange = (theme) => {
+  console.log('Theme changed:', theme)
+}
+</script>
+```
+
+#### ThemeSwitcher.vue - 主题切换按钮
+
+悬浮主题切换按钮，点击弹出主题选择器：
 
 ```vue
 <template>
@@ -169,6 +218,20 @@ export default {
 
 <script setup>
 import { ThemeSwitcher } from '@/theme/mobile'
+</script>
+```
+
+### 4. 主题预览页面示例
+
+完整的主题设置页面，包含当前主题预览、所有主题选择和智能切换设置：
+
+```vue
+<template>
+  <ThemePreviewPage />
+</template>
+
+<script setup lang="ts">
+import ThemePreviewPage from '@/theme/mobile/examples/ThemePreviewPage.vue'
 </script>
 ```
 
@@ -415,25 +478,91 @@ setInterval(checkTimeTheme, 3600000)
 
 ## 📊 主题效果预览
 
-### 浅色主题
+### 主题预览缩略图
+每个主题都有精美的预览缩略图，包含：
+- 导航栏样式
+- 内容区色块展示（主色、成功色、警告色、危险色）
+- 底部标签栏
+- 选中状态标识
+
+### 主题效果说明
+#### 浅色主题
 - 适合光线充足的环境
 - 标准的 UI 设计风格
 - 最佳的可读性和对比度
 
-### 深色主题
+#### 深色主题
 - 适合夜间使用，保护眼睛
 - 节省 OLED 屏幕电量
 - 现代科技感
 
-### 商务蓝主题
+#### 商务蓝主题
 - 适合企业正式场景
 - 专业、稳重的视觉感受
 - 适合金融、政府等行业
 
-### 渐变主题
+#### 渐变主题
 - 适合创新、科技产品
 - 年轻、活力的视觉感受
 - 适合年轻用户群体
+
+### 智能主题切换
+
+#### 跟随系统深色模式
+自动跟随系统的深色/浅色模式切换：
+
+```vue
+<script setup lang="ts">
+import { onMounted, onUnmounted } from 'vue'
+import { useMobileTheme } from '@/theme/mobile'
+
+const { setTheme } = useMobileTheme()
+
+onMounted(() => {
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  
+  const handleChange = (e) => {
+    setTheme(e.matches ? 'dark' : 'light')
+  }
+  
+  mediaQuery.addEventListener('change', handleChange)
+  handleChange({ matches: mediaQuery.matches })
+})
+</script>
+```
+
+#### 根据时间自动切换
+根据时间自动在深色和浅色主题间切换：
+
+```vue
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useMobileTheme } from '@/theme/mobile'
+
+const { setTheme } = useMobileTheme()
+let intervalId = null
+
+const checkTime = () => {
+  const hour = new Date().getHours()
+  if (hour >= 18 || hour < 6) {
+    setTheme('dark')  // 夜间使用深色主题
+  } else {
+    setTheme('light')
+  }
+}
+
+onMounted(() => {
+  checkTime()
+  intervalId = setInterval(checkTime, 60000) // 每分钟检查一次
+})
+
+onUnmounted(() => {
+  if (intervalId) {
+    clearInterval(intervalId)
+  }
+})
+</script>
+```
 
 ## 🔧 自定义主题
 

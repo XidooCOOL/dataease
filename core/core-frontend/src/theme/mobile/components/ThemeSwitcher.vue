@@ -1,50 +1,42 @@
 <template>
   <div class="theme-switcher">
-    <van-popover v-model:show="showPicker" :actions="themeActions" @select="onSelect">
-      <template #reference>
-        <van-button size="small" icon="brush" type="primary" plain>
-          切换主题
-        </van-button>
-      </template>
-    </van-popover>
+    <!-- 触发按钮 -->
+    <van-button 
+      size="small" 
+      icon="brush" 
+      type="primary" 
+      plain
+      @click="showThemePicker = true"
+      class="theme-switcher__button"
+    >
+      切换主题
+    </van-button>
+    
+    <!-- 主题选择弹窗 -->
+    <van-popup 
+      v-model:show="showThemePicker"
+      position="bottom"
+      round
+      :style="{ height: '60%' }"
+      class="theme-switcher__popup"
+    >
+      <ThemePicker 
+        @close="showThemePicker = false"
+        @change="handleThemeChange"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { showToast } from 'vant'
-import { useMobileTheme, getThemeConfig } from '@/theme/mobile/useMobileTheme'
+import { ref } from 'vue'
+import ThemePicker from './ThemePicker.vue'
 import type { ThemeType } from '@/theme/mobile/themes'
 
-const { currentThemeType, setTheme } = useMobileTheme()
-const showPicker = ref(false)
+const showThemePicker = ref(false)
 
-const themeActions = computed(() => {
-  const themes = [
-    { type: 'light', name: '浅色主题', color: '#3370FF' },
-    { type: 'dark', name: '深色主题', color: '#1F2937' },
-    { type: 'blue', name: '商务蓝', color: '#1E40AF' },
-    { type: 'purple', name: '神秘紫', color: '#7C3AED' },
-    { type: 'green', name: '清新绿', color: '#059669' },
-    { type: 'orange', name: '活力橙', color: '#EA580C' },
-    { type: 'pink', name: '少女粉', color: '#EC4899' },
-    { type: 'gradient', name: '渐变', color: '#667EEA' }
-  ]
-  
-  return themes.map(theme => ({
-    ...theme,
-    text: theme.name,
-    disabled: theme.type === currentThemeType.value
-  }))
-})
-
-const onSelect = (action: any) => {
-  setTheme(action.type as ThemeType)
-  showToast({
-    message: `已切换至${action.name}`,
-    position: 'bottom'
-  })
-  showPicker.value = false
+const handleThemeChange = (theme: ThemeType) => {
+  // 主题已在 ThemePicker 中切换，这里可以处理额外逻辑
 }
 </script>
 
@@ -54,5 +46,18 @@ const onSelect = (action: any) => {
   top: 60px;
   right: 16px;
   z-index: 1000;
+}
+
+.theme-switcher__button {
+  box-shadow: var(--mobile-shadow-md, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.theme-switcher__popup {
+  --van-popup-round-radius: 16px 16px 0 0;
+}
+
+:deep(.theme-switcher__popup .van-popup__close-icon) {
+  top: 12px;
+  right: 12px;
 }
 </style>

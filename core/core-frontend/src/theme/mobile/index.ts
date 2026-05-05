@@ -15,6 +15,8 @@ export * from './antDesignMobile'
 
 // 组件
 export { default as ThemeSwitcher } from './components/ThemeSwitcher.vue'
+export { default as ThemePicker } from './components/ThemePicker.vue'
+export { default as ThemePreview } from './components/ThemePreview.vue'
 
 // 样式
 import './styles/theme-variables.css'
