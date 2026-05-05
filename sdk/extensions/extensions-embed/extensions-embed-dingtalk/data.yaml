@@ -1,0 +1,8 @@
+name: 钉钉嵌入集成插件
+title: 钉钉嵌入集成插件
+description: 支持将 DataEase 仪表板嵌入到钉钉中，实现钉钉用户单点登录和权限集成，推荐使用 DataEase v2.10.21 及以上版本
+tags:
+  - 嵌入集成插件
+  - 钉钉
+additionalProperties:
+  enterprise: true

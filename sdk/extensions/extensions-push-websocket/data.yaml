@@ -1,0 +1,8 @@
+name: WebSocket 数据推送插件
+title: WebSocket 数据推送插件
+description: 提供实时数据变更推送能力，支持仪表板自动刷新，支持 WebSocket 推送和轮询两种模式，推荐使用 DataEase v2.10.21 及以上版本
+tags:
+  - 数据推送插件
+  - 实时刷新
+additionalProperties:
+  enterprise: true

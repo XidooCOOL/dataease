@@ -1,0 +1,8 @@
+name: Apache Kafka 数据源插件
+title: Apache Kafka 数据源插件
+description: Apache Kafka 流式数据源插件，支持实时订阅 Topic 数据接入，推荐使用 DataEase v2.10.21 及以上版本
+tags:
+  - 数据源插件
+  - 流式数据
+additionalProperties:
+  enterprise: true
